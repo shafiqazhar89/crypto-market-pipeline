@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# dlt / dbt / dagster local state (added as these show up)
+.dlt/secrets.toml
+*.duckdb
+dbt_packages/
+target/
+logs/
+
+# OS / editor
+.DS_Store
+.vscode/
