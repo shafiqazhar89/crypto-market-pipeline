@@ -6,6 +6,7 @@ __pycache__/
 # dlt / dbt / dagster local state (added as these show up)
 .dlt/secrets.toml
 *.duckdb
+.duckdb/
 dbt_packages/
 target/
 logs/
