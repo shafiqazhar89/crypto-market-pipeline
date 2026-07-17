@@ -1,0 +1,1 @@
+ADR- architecture decision record is document that record one decision on why, what, alternatives considered for a decision. Decisions get numbered file here is because in working_notes.md it did not capture what we are actually weigh. It got numbered standalone files for permanence and discoverability.

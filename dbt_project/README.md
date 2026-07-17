@@ -1,0 +1,1 @@
+It uses raw data from data warehouse and Transform it into cleaner, tested and documented model using sql.
