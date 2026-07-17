@@ -129,10 +129,11 @@ cat ~/.ssh/id_ed25519.pub
 ```
 Added under GitHub → Settings → SSH and GPG keys → New SSH key.
 
-**Test the connection (next step, not yet run):**
+**Test the connection:**
 ```bash
 ssh -T git@github.com
 ```
+Ran and authenticated successfully — `Hi shafiqazhar89! You've successfully authenticated, but GitHub does not provide shell access.` (Session 3.)
 
 ---
 
