@@ -1,0 +1,1 @@
+Data load tools to extract data from coingecko api and load it into data warehouse, it is a standard to split dlt in modern stack as it should carry no business logic and stay unmodified.
