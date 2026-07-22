@@ -135,6 +135,42 @@ ssh -T git@github.com
 ```
 Ran and authenticated successfully — `Hi shafiqazhar89! You've successfully authenticated, but GitHub does not provide shell access.` (Session 3.)
 
+## 12. Portable DuckDB path (dbt + dlt)
+
+> Found during the Phase 0 continuity check: both `~/.dbt/profiles.yml` and `dlt/rest_api_pipeline.py` originally hardcoded an absolute path (`/home/shafiq/crypto-market-pipeline/.duckdb/...`). Since `~/.dbt/profiles.yml` is a single file shared by every dbt project on the machine (keyed by profile name, not directory), any second clone of this repo silently read/wrote into the *original* clone's database — a real data-corruption risk, not just a portability nit. Fixed by moving the path into environment variables, resolved outside the repo (see PR #4, #5).
+
+**`~/.dbt/profiles.yml` — never committed to git (standard dbt convention: per-machine, can hold credentials). Recreate this on any new machine:**
+```yaml
+crypto_market_pipeline:
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('CRYPTO_PIPELINE_DUCKDB_PATH_DEV') }}"
+      threads: 1
+    prod:
+      type: duckdb
+      path: "{{ env_var('CRYPTO_PIPELINE_DUCKDB_PATH_PROD') }}"
+      threads: 4
+  target: dev
+```
+
+**`~/.bashrc` — add these two lines (values are per-clone; below is this machine's original clone):**
+```bash
+export CRYPTO_PIPELINE_DUCKDB_PATH_DEV=/home/shafiq/crypto-market-pipeline/.duckdb/dev.duckdb
+export CRYPTO_PIPELINE_DUCKDB_PATH_PROD=/home/shafiq/crypto-market-pipeline/.duckdb/prod.duckdb
+```
+Then `source ~/.bashrc`.
+
+**dlt side:** `dlt/rest_api_pipeline.py` reads the same dev var directly — `os.environ["CRYPTO_PIPELINE_DUCKDB_PATH_DEV"]`. Ingestion always targets `dev`, never `prod`.
+
+**Verify:**
+```bash
+env | grep CRYPTO_PIPELINE
+dbt debug   # "Connection: path:" should show the value from the env var, not a literal hardcoded string
+```
+
+**Why two separate vars instead of one:** collapsing `dev`/`prod` onto a single var means a mistyped `--target prod` silently reads/writes `dev`'s file instead of failing or hitting an isolated one. Cheap to keep them separate now.
+
 ---
 
 ## Pro-tips picked up this session (also copied to Working_Notes.md §4)
