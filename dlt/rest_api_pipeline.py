@@ -1,3 +1,5 @@
+
+import os
 import dlt
 from dlt.sources.rest_api import (
     RESTAPIConfig,
@@ -40,7 +42,7 @@ def load_coingecko() -> None:
     pipeline = dlt.pipeline(
         pipeline_name="crypto_market_pipeline",
         destination=dlt.destinations.duckdb(
-            credentials="/home/shafiq/crypto-market-pipeline/.duckdb/dev.duckdb"
+            credentials= os.environ["CRYPTO_PIPELINE_DUCKDB_PATH_DEV"]
         ),
         dataset_name="raw",
     )
