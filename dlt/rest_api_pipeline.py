@@ -39,6 +39,9 @@ def coingecko_source(api_key=dlt.secrets.value):
 
 
 def load_coingecko() -> None:
+    duckdb_path = os.environ["CRYPTO_PIPELINE_DUCKDB_PATH_DEV"]
+    os.makedirs(os.path.dirname(duckdb_path), exist_ok=True)
+    
     pipeline = dlt.pipeline(
         pipeline_name="crypto_market_pipeline",
         destination=dlt.destinations.duckdb(
