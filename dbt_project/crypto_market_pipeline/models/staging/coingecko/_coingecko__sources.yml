@@ -1,0 +1,24 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: coins_markets
+        description: >
+                        Daily top-250 market snapshot from CoinGecko /coins/markets.
+                        One row per (coin, snapshot_date). Idempotent/incremental via
+                        merge on (id, snapshot_date).
+        loaded_at_field: last_updated
+        freshness:
+          warn_after: {count: 30, period: hour}
+          error_after: {count: 48, period: hour}
+
+      - name: coin_metadata
+        description: >
+                        Current-state coin metadata from CoinGecko /coins/{id}, full
+                        replace on each run. Source for dim_coin's SCD2 snapshot.
+        loaded_at_field: last_updated
+        freshness:
+          warn_after: {count: 30, period: hour}
+          error_after: {count: 48, period: hour}
