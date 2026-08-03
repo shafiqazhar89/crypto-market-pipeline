@@ -8,7 +8,6 @@ renamed as (
         symbol,
         name,
         categories,
-        total_supply,
         max_supply,
         last_updated
 

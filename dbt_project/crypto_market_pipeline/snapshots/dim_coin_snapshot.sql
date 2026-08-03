@@ -5,10 +5,11 @@
         target_schema='snapshots',
         unique_key='coin_id',
         strategy='check',
-        check_cols=['symbol', 'name', 'categories', 'total_supply', 'max_supply'],
+        check_cols=['symbol', 'name', 'categories', 'max_supply', 'market_cap_rank_bucket'],
+        hard_deletes='invalidate',
     )
 }}
 
-select * from {{ ref('stg_coingecko__coin_metadata') }}
+select * from {{ ref('int_coin_metadata_enriched') }}
 
 {% endsnapshot %}
