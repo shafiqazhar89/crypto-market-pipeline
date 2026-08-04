@@ -19,5 +19,5 @@ select
 from {{ ref('stg_coingecko__coins_markets') }}
 
 {% if is_incremental() %}
-where snapshot_date > (select max(snapshot_date) from {{ this }})
+where snapshot_date > {{ max_snapshot_date(this) }}
 {% endif %}
